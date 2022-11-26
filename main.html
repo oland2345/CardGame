@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<head>
+    <title>Card Game</title>
+    
+</head>
+<body>
+<div id="coinScore">
+    <h3 id="coinMeter">coins mana lolol</h3>
+</div>
+<div id="mainMenu">
+    
+    <h1 id="title">Card Game</h1>
+    <button id="help">?</button>
+    <button id="playBTN" onclick="Start()">Press Start</button>
+
+</div>
+<div id="game">
+
+<div id="fightSceen">
+    
+    <div id="CardHolder">
+        <card id="MyCard"><img id="icon" src="fire.png" > <img id="shape" src="cardMoud.png"> <h3 id="nameCard"></h3> <p id="Descripton"></p> <h6 id="Info"></h6></card>
+
+        <card id="OPcard"><img id="iconOP" src="fire.png" > <img id="shapeOP" src="cardMoud.png"> <h3 id="nameCardOP"></h3> <p id="DescriptonOP"></p> </card>
+        <div id="ctrlBTNS">
+            <button id="yn" onclick="ThisCard()">Fight</button>
+            <button id="yn" onclick="NewCard()">Next Card</button>
+        </div>
+        
+    </div>
+</div>    
+</div>
+</body>
+<style>
+body{
+    overflow: hidden;
+}
+@font-face {
+    font-family: 'Pixl'; /*a name to be used later*/
+    src: url("pixl.ttf");
+}
+
+/* Main menu*/
+#help{
+    float: right;
+    position: absolute;
+    border-radius: 30px;
+    height: 40px;
+    width: 40px;
+    transform: translate(800px,-50px);
+}
+#mainMenu{
+    display: grid;
+    place-items: center;
+    border: 0;
+
+}
+
+#playBTN{
+    height: 100px;
+    width: 400px;
+    border: 0;
+    color: azure;
+    background-color: black;
+    
+}
+/*game*/
+
+
+#yn{
+    font-family: "Pixl";
+    font-size: 50px;
+    height: 100px;
+    width: 400px;
+    border: 0;
+    color: azure;
+    background-color: black;
+    
+}
+
+/*Player*/
+
+#MyCard{
+    display: grid;
+    place-items: center;
+    transform: translate(-450px,0px);
+}
+h3{
+    
+    font-size: 50px;
+    position: absolute;
+    font-family: "Pixl";
+}
+
+#coinScore{
+    
+    background-color: black;
+    position: absolute;
+    height: 500px;
+    
+    transform: translate(-10px, 750px);
+    
+    width: 100000px;
+    
+    z-index: 1000;
+    border: 0;
+}
+#coinMeter{
+    
+    color: white;
+    
+    font-size: 20px;
+    position: absolute;
+    transform: translate(10px, -10px);
+    font-family: "Pixl";
+}
+h6{
+    
+    font-size: 30px;
+    position: absolute;
+    font-family: "Pixl";
+}
+p{
+    font-size: 35px;
+    position: absolute;
+    transform:  translate(0px, 40px);
+    font-family: "Pixl";
+}
+#shape{
+    
+    image-rendering: pixelated;
+    height: 600px;
+    width: 600px;
+}
+#icon{
+    position:absolute;
+    
+    image-rendering: pixelated;
+    float: right;
+    transform: translate(-180px, -250px);
+    height: 300px;
+    width: 300px;
+}
+
+/*Opponent*/
+#nameCardOP{
+    
+    font-size: 20px;
+    position: absolute;
+    
+    font-family: "Pixl";
+}
+#DescriptonOP{
+    
+    font-size: 15px;
+    position: absolute;
+    font-family: "Pixl";
+}
+#OPcard{
+    display: grid;
+    
+    place-items: center;
+    transform: translate(1400px, -500px);
+    position: absolute;
+}
+#shapeOP{
+    
+    image-rendering: pixelated;
+    height: 300px;
+    width: 300px;
+}
+#iconOP{
+    position:absolute;
+    
+    image-rendering: pixelated;
+    float: right;
+    transform: translate(-15px, -60px);
+    height: 150px;
+    width: 150px;
+}
+
+
+@keyframes spin {
+
+0% {
+  transform: rotate3d(0, 1, 0, 0);
+}
+
+100% {
+  transform: rotate3d(0, 1, 0, 360deg);
+}
+
+}
+</style>
+<script>
+
+var def = 20;
+var atk = 20;
+var opAtk = 20;
+var opDef = 20;
+var OPtype = "";
+var Mytype="";
+document.getElementById("game").style.display = "none"
+const names = ["Herpius", "Mostrus", "Melkius", "Harpius", "Kevius", "Chweus", "Makius", "Rozdius", "Fredius", "Plutius", "Sonius", "Jupius", "Venus", "Fredrick", "Victorius", "Jonasius", "Julius", "Mollius", "Emilius", "Ulius", "Urus", "Vergnus", "Velcanius", "Jimius", "Sarcius", "Noneius", "Funcius", "Htlius", "Csius", "Frankius", "Neoius", "Gustius","Pastius","Lebeius","Rebelius","Chaibeus", "Kanibalius", "Plisus", "Helpius", "Imius", "Kindnapius" ]
+const types = ["fire", "stone", "water", "leaf"]
+
+document.getElementById("iconOP").style.transform = "translate(-10px,0px)";
+document.getElementById("iconOP").src = "Logo.png"
+
+function Start(){
+    document.getElementById("mainMenu").style.display = "none"
+    document.getElementById("game").style.display = "block"
+
+    NewCard()
+}
+function ThisCard(){
+    CreateEnemy()
+}
+
+function NewCard(){
+    const random = Math.floor(Math.random() * names.length);
+    const randomTYPE = Math.floor(Math.random() * types.length);
+    document.getElementById("nameCard").textContent = "Name: " + names[random];
+    const randomATKDEF = Math.floor(Math.random() * 20);
+    def = 20 - randomATKDEF;
+    atk = 20 - def; 
+    document.getElementById("icon").src = types[randomTYPE] + ".png";
+    Mytype = types[randomTYPE];
+    document.getElementById("Descripton").textContent = "def: " + def + " atk: " + atk;
+
+    document.getElementById("iconOP").style.transform = "translate(-10px,0px)";
+    document.getElementById("iconOP").src = "Logo.png";
+    document.getElementById("DescriptonOP").textContent = "";
+    document.getElementById("nameCardOP").textContent = "";
+}
+function CreateEnemy(){
+    
+    const random2 = Math.floor(Math.random() * names.length);
+    const randomTYPE2 = Math.floor(Math.random() * types.length);
+
+
+    document.getElementById("nameCardOP").textContent = "Name: " + names[random2];
+    const randomATKDEF2 = Math.floor(Math.random() * 20);
+    opDef = 20 - randomATKDEF2;
+    opAtk = 20 - opDef; 
+    document.getElementById("iconOP").style.transform = "translate(-82px,-122px)";
+    document.getElementById("iconOP").src = "Logo.png"
+    document.getElementById("iconOP").src = types[randomTYPE2] + ".png";
+    OPtype = types[randomTYPE2];
+
+    if (opAtk < 1){
+        opDef -=1;
+        opAtk +=1; 
+    }
+    if(opDef < 1){
+        opAtk-=1;
+        opDef+=1;
+    }
+    if(atk < 1){
+	 		atk +=1
+			def-=1
+	 }
+	 if(def < 1){
+	 		def +=1
+			atk-=1
+	 }
+	 setupFight();
+    Battel();
+}
+function setupFight(){
+    
+    
+    if(OPtype == "fire" & Mytype == "water"){
+        document.getElementById("Descripton").textContent = "def: " + def + "(+3) atk: " + atk + "(+4)";
+        document.getElementById("DescriptonOP").textContent = "def: " + opDef + " atk: " + opAtk;
+        atk += 4;
+        def += 3;
+        return
+    }
+    if(OPtype == "water" & Mytype == "fire"){
+        document.getElementById("DescriptonOP").textContent = "def: " + opDef + "(+3) atk: " + opAtk + "(+4)";
+        document.getElementById("Descripton").textContent = "def: " + def + " atk: " + atk;
+        opAtk += 4;
+        opDef += 3;
+        return
+    }
+
+    if(OPtype == "leaf" & Mytype == "fire"){
+        document.getElementById("Descripton").textContent = "def: " + def + "(+0) atk: " + atk + "(+7)";
+        document.getElementById("DescriptonOP").textContent = "def: " + opDef + " atk: " + opAtk;
+        atk += 7;
+        return
+    }
+    if(OPtype == "fire" & Mytype == "leaf"){
+        document.getElementById("DescriptonOP").textContent = "def: " + opDef + "(+0) atk: " + opAtk + "(+7)";
+
+        document.getElementById("Descripton").textContent = "def: " + def + " atk: " + atk;
+        opAtk += 7;
+        return
+        
+    }
+
+    if(OPtype == "water" & Mytype == "stone"){
+        document.getElementById("Descripton").textContent = "def: " + def + "(+5) atk: " + atk + "(+2)";
+        document.getElementById("DescriptonOP").textContent = "def: " + opDef + " atk: " + opAtk;
+        atk += 2;
+        def += 5;
+        return
+    }
+    if(OPtype == "stone" & Mytype == "water"){
+        document.getElementById("DescriptonOP").textContent = "def: " + opDef + "(+5) atk: " + opAtk + "(+2)";
+        document.getElementById("Descripton").textContent = "def: " + def + " atk: " + atk;
+        opAtk += 2;
+        opDef += 5;
+        return
+    }
+
+    if(OPtype == "stone" & Mytype == "leaf"){
+        document.getElementById("Descripton").textContent = "def: " + def + "(+1) atk: " + atk + "(+6)";
+        document.getElementById("DescriptonOP").textContent = "def: " + opDef + " atk: " + opAtk;
+        atk += 6
+        def += 1;
+        return
+    }
+    if(OPtype == "leaf" & Mytype == "stone"){
+        document.getElementById("DescriptonOP").textContent = "def: " + opDef + "(+1) atk: " + opAtk + "(+6)";
+        document.getElementById("Descripton").textContent = "def: " + def + " atk: " + atk;
+        opAtk += 6
+        opDef += 1;
+        return
+    }
+
+    
+
+    document.getElementById("Descripton").textContent = "def: " + def + " atk: " + atk;
+    document.getElementById("DescriptonOP").textContent = "def: " + opDef + " atk: " + opAtk;
+}
+async function Battel(){
+    await new Promise(r => setTimeout(r, 1000));
+    const coinflip = Math.floor(Math.random() * 2);
+    alert("Start player " + coinflip)
+    if(coinflip){
+        while (opDef > 0 || def > 0){
+            opDef -= atk
+            def -= opAtk
+        }
+       
+    }else{
+        while (opDef > 0 || def > 0){
+            def -= opAtk
+            opDef -= atk
+            
+        }
+        
+    }
+    if(def > opDef){
+        alert("You win")
+    }else{
+        alert("You Lose")
+    }
+    NewCard()
+}        
+</script>
