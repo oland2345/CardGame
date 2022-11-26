@@ -32,14 +32,12 @@
 </div>
 </body>
 <style>
-
+body{
+    overflow: hidden;
+}
 @font-face {
     font-family: 'Pixl'; /*a name to be used later*/
     src: url("pixl.ttf");
-}
-body{
-    overflow: hidden;
-    font-family: "Pixl";
 }
 
 /* Main menu*/
@@ -51,10 +49,14 @@ body{
     width: 40px;
     transform: translate(800px,-50px);
 }
+#title{
+    font-size: 100px;
+}
 #mainMenu{
     display: grid;
     place-items: center;
     border: 0;
+    font-family: "Pixl";
 
 }
 
@@ -62,6 +64,8 @@ body{
     height: 100px;
     width: 400px;
     border: 0;
+    font-family: "Pixl";
+    font-size: 45px;
     color: azure;
     background-color: black;
     
@@ -340,7 +344,7 @@ function setupFight(){
 async function Battel(){
     await new Promise(r => setTimeout(r, 1000));
     const coinflip = Math.floor(Math.random() * 2);
-    alert("Start player " + coinflip)
+    
     if(coinflip){
         while (opDef > 0 || def > 0){
             opDef -= atk
